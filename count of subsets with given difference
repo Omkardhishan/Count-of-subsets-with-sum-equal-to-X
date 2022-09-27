@@ -1,0 +1,47 @@
+int countPartitions(int n, int d, vector<int> &arr) {
+    // Write your code here.
+    const int mod = 1e9 + 7;
+    int sum=0;
+    for(int i=0;i<n;i++){
+        sum=sum+arr[i];
+    }
+//     cout<<"The sum is: "<<sum<<endl;
+//     cout<<"The number of terms is: "<<n<<endl;
+    
+    int value=(sum+d);
+    if(value%2 !=0 || d>sum){ //difference cant be greater than sum, value of sum+diff has to be even then only will s1 exist.
+        return 0;
+    }
+    else{
+         value=value/2;
+//     cout<<"the value of s1 is:"<<value<<endl;
+    //now we basically want to find the number of arrays with weight =value
+   
+    int t[n+1][value+1];
+    
+    //initialization
+    for(int i=0;i<n+1;i++){
+        for(int j=0;j<value+1;j++){
+            if(i==0){
+                t[i][j]=0;
+            }
+            if(j==0){
+                t[i][j]=1;
+            }
+        }
+    }
+    
+    //Solving the main code
+    for(int i=1;i<n+1;i++){
+        for(int j=0;j<value+1;j++){  //j starts from 0 as we also have to consider the element '0'.
+            if(arr[i-1]<=j){
+                t[i][j]=(t[i-1][j]+t[i-1][j-arr[i-1]]);//%mod; //totalcount
+            }
+            else{
+                t[i][j]=t[i-1][j];
+            }
+        }
+    }
+    return t[n][value];
+    }
+}
